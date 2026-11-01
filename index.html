@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#225c4b">
+  <meta name="description" content="BrightPath Learning: friendly, original practice for Grades 1–6 across math, English, science and more.">
+  <title>BrightPath Learning — Small steps, big discoveries</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="BrightPath Learning home"><span class="brand-mark">✦</span><span>brightpath<span class="brand-light"> learning</span></span></a>
+    <nav class="top-nav" aria-label="Main navigation"><button class="nav-link active" data-view="learn">Learn</button><button class="nav-link" data-view="progress">My progress</button></nav>
+    <div class="header-stats"><span class="streak">☀ <b id="streak-count">0</b> day streak</span><span class="points-pill">✦ <b id="header-points">0</b> pts</span></div>
+  </header>
+  <main id="app">
+    <section id="learn-view" class="view">
+      <section class="hero">
+        <div class="hero-copy"><span class="eyebrow">YOUR NEXT DISCOVERY STARTS HERE</span><h1>Little steps.<br><em>Big discoveries.</em></h1><p>Build confidence one question at a time. Pick a grade, choose what you're curious about, and let's learn.</p><div class="hero-note"><span class="sparkle">✦</span> Practice at your own pace. Every answer helps you grow.</div></div>
+        <div class="hero-art" aria-hidden="true"><div class="sun"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="book book-back"></div><div class="book book-front"><span>ABC</span><span>123</span><span>✦</span></div><div class="art-star star-one">✦</div><div class="art-star star-two">✧</div><div class="art-leaf">〰</div><div class="art-caption">LEARN SOMETHING<br>NEW TODAY</div></div>
+      </section>
+      <section class="grade-section"><div class="section-heading"><div><span class="eyebrow">STEP 1</span><h2>Choose your grade</h2></div><span class="muted">Find your starting point</span></div><div id="grade-list" class="grade-grid" role="group" aria-label="Choose grade"></div></section>
+      <section class="subject-section"><div class="section-heading"><div><span class="eyebrow">STEP 2</span><h2>What shall we explore?</h2></div><span class="muted">A little practice goes a long way</span></div><div id="subject-list" class="subject-grid"></div></section>
+      <section class="skills-section"><div class="section-heading"><div><span class="eyebrow">STEP 3</span><h2 id="skills-title">Pick a skill to practise</h2></div><span class="muted" id="skills-subtitle">Short sessions, real progress</span></div><div id="skill-list" class="skill-grid"></div></section>
+      <section class="bottom-tip"><span class="tip-icon">☼</span><div><b>A tip for learners</b><p>It's okay to make mistakes. Read the explanation, try again, and celebrate what you learn.</p></div></section>
+    </section>
+    <section id="practice-view" class="view hidden" aria-live="polite"></section>
+    <section id="progress-view" class="view hidden">
+      <div class="page-heading"><span class="eyebrow">LOOK HOW FAR YOU'VE COME</span><h1>Your learning journey</h1><p>Every practice session adds another step to your progress.</p></div>
+      <div class="metric-grid"><article class="metric-card"><span class="metric-icon green">✦</span><span class="metric-label">Total points</span><strong id="progress-points">0</strong><small>Keep collecting them!</small></article><article class="metric-card"><span class="metric-icon peach">✓</span><span class="metric-label">Questions answered</span><strong id="progress-answered">0</strong><small>Every try counts</small></article><article class="metric-card"><span class="metric-icon lilac">◎</span><span class="metric-label">Accuracy</span><strong id="progress-accuracy">0%</strong><small>Correct answers overall</small></article><article class="metric-card"><span class="metric-icon yellow">☀</span><span class="metric-label">Day streak</span><strong id="progress-streak">0</strong><small>Come back to keep growing</small></article></div>
+      <section class="progress-panel"><div class="section-heading"><div><span class="eyebrow">YOUR PRACTICE</span><h2>Skills you've tried</h2></div><button class="text-button" id="reset-progress">Reset progress</button></div><div id="skill-progress-list" class="skill-progress-list"></div></section>
+      <section class="bottom-tip"><span class="tip-icon">✧</span><div><b>Learning is a journey, not a race.</b><p>Try a new skill today, or revisit one to strengthen your understanding.</p></div></section>
+    </section>
+  </main>
+  <footer><a class="brand footer-brand" href="#home"><span class="brand-mark">✦</span><span>brightpath<span class="brand-light"> learning</span></span></a><span>Made for curious minds · Grades 1–6</span><span class="offline-label"><span></span> Works locally</span></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
