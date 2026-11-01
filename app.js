@@ -34,39 +34,8 @@ const SKILLS = {
     { id: 'thinking', title: 'Logic & patterns', description: 'Use clues and reasoning to solve puzzles.', topic: 'Critical thinking' }
   ]
 };
+// Math questions are grade-specific and live in math-questions.js (MATH_BANK).
 const BANK = {
-  math: {
-    counting: [
-      { q: 'Which number comes next?', detail: 'Look at the counting pattern.', choices: ['12', '14', '15', '17'], answer: '15', explain: 'The numbers go up by 1: 12, 13, 14, 15.', hint: 'Count forward one number at a time.' },
-      { q: 'Which number is greatest?', detail: 'Compare each number.', choices: ['28', '82', '38', '23'], answer: '82', explain: '82 has 8 tens, which is more than the tens in the other numbers.', hint: 'Compare the tens digit first.' },
-      { q: 'How many tens are in 46?', detail: 'Think about place value.', choices: ['4', '6', '40', '46'], answer: '4', explain: '46 is made of 4 tens and 6 ones.', hint: 'Look at the digit in the tens place.' }
-    ],
-    addition: [
-      { q: 'What is 7 + 5?', choices: ['10', '11', '12', '13'], answer: '12', explain: 'Start at 7 and count up 5 more: 8, 9, 10, 11, 12.', hint: 'Try making 10 first: 7 + 3 + 2.' },
-      { q: 'A basket has 14 apples. You add 8 more. How many apples are there?', choices: ['20', '21', '22', '24'], answer: '22', explain: '14 + 8 = 22 apples.', hint: 'Add 6 to reach 20, then add the remaining 2.' },
-      { q: 'What is 36 + 27?', choices: ['53', '63', '64', '73'], answer: '63', explain: '30 + 20 = 50, and 6 + 7 = 13. Then 50 + 13 = 63.', hint: 'Add tens and ones, then combine.' }
-    ],
-    subtraction: [
-      { q: 'What is 15 − 6?', choices: ['7', '8', '9', '11'], answer: '9', explain: '15 take away 6 leaves 9.', hint: 'Count backwards six steps from 15.' },
-      { q: 'There are 32 birds. 14 fly away. How many remain?', choices: ['16', '18', '20', '22'], answer: '18', explain: '32 − 14 = 18 birds remain.', hint: 'Subtract 10 first, then subtract 4.' },
-      { q: 'What is 100 − 46?', choices: ['44', '54', '64', '56'], answer: '54', explain: '100 − 40 = 60, then 60 − 6 = 54.', hint: 'Subtract 40, then subtract 6.' }
-    ],
-    multiplication: [
-      { q: 'What is 4 × 3?', choices: ['7', '10', '12', '16'], answer: '12', explain: 'Four groups of three make 3 + 3 + 3 + 3 = 12.', hint: 'Think of four groups with three in each group.' },
-      { q: 'There are 5 bags with 6 marbles in each. How many marbles altogether?', choices: ['11', '25', '30', '35'], answer: '30', explain: '5 groups of 6 make 5 × 6 = 30.', hint: 'Add 6 five times, or use the 5 times table.' },
-      { q: 'What is 8 × 7?', choices: ['48', '54', '56', '64'], answer: '56', explain: '8 groups of 7 equal 56.', hint: 'You can use 7 × 4 = 28 and double it.' }
-    ],
-    fractions: [
-      { q: 'A pizza is cut into 4 equal slices. You eat 1 slice. What fraction did you eat?', choices: ['1/2', '1/3', '1/4', '4/1'], answer: '1/4', explain: 'One out of four equal slices is one quarter, written 1/4.', hint: 'The bottom number tells how many equal pieces there are.' },
-      { q: 'Which fraction is equal to one half?', choices: ['2/3', '2/4', '1/4', '3/4'], answer: '2/4', explain: 'Two out of four equal parts make the same amount as one half.', hint: 'Imagine splitting each half into two equal parts.' },
-      { q: 'Which is greater?', choices: ['1/4', '3/4', 'They are equal', 'Cannot tell'], answer: '3/4', explain: 'When the denominators are equal, the fraction with the larger numerator is greater.', hint: 'Both fractions have four equal parts. Compare how many parts are shaded.' }
-    ],
-    geometry: [
-      { q: 'How many sides does a hexagon have?', choices: ['4', '5', '6', '8'], answer: '6', explain: 'A hexagon is a polygon with six sides.', hint: 'The prefix “hexa-” means six.' },
-      { q: 'Which shape has four equal sides and four right angles?', choices: ['Triangle', 'Rectangle only', 'Square', 'Pentagon'], answer: 'Square', explain: 'A square has four equal sides and four right angles.', hint: 'Think of a shape often drawn like a tile.' },
-      { q: 'How many degrees are in a right angle?', choices: ['45°', '90°', '180°', '360°'], answer: '90°', explain: 'A right angle measures exactly 90 degrees.', hint: 'It is the angle at the corner of a square.' }
-    ]
-  },
   english: {
     grammar: [
       { q: 'Choose the correct word: “The puppies ___ playing.”', choices: ['is', 'are', 'was', 'be'], answer: 'are', explain: '“Puppies” is plural, so “are” agrees with the subject.', hint: 'The subject is more than one puppy.' },
@@ -130,6 +99,10 @@ const BANK = {
   }
 };
 
+const MIN_QUESTIONS_PER_SKILL = 5;
+const MATH_CHECK = validateMathBank(MATH_BANK, GRADES, SKILLS.math.map(skill => skill.id), MIN_QUESTIONS_PER_SKILL);
+if (MATH_CHECK.errors.length) console.error(`BrightPath math question bank has ${MATH_CHECK.errors.length} problem(s):\n${MATH_CHECK.errors.join('\n')}`);
+
 const STORAGE_KEY = 'brightpath-progress-v1';
 let state = loadState();
 let selectedGrade = 3;
@@ -149,6 +122,14 @@ function loadState() {
 function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (error) { showToast('Progress could not be saved in this browser.'); } }
 function esc(value) { return String(value).replace(/[&<>"']/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch])); }
 function getSkill(subject, skillId) { return (SKILLS[subject] || []).find(skill => skill.id === skillId); }
+function getQuestions(grade, subject, skillId) {
+  if (subject === 'math') return ((MATH_BANK[grade] || {})[skillId] || []).filter(q => !MATH_CHECK.invalid.has(q));
+  return (BANK[subject] && BANK[subject][skillId]) || [];
+}
+function skillDescription(grade, subject, skill) {
+  const focus = subject === 'math' && MATH_GRADE_FOCUS[grade] && MATH_GRADE_FOCUS[grade][skill.id];
+  return focus || skill.description;
+}
 function skillStats(key) { return state.bySkill[key] || { answered: 0, correct: 0, points: 0, best: 0 }; }
 function skillKey(grade, subject, skillId) { return `${grade}-${subject}-${skillId}`; }
 function gradeLabel(grade) { return `Grade ${grade}`; }
@@ -174,7 +155,7 @@ function renderSkills() {
   document.getElementById('skill-list').innerHTML = skills.map(skill => {
     const stats = skillStats(skillKey(selectedGrade, selectedSubject, skill.id));
     const accuracy = stats.answered ? Math.round(stats.correct / stats.answered * 100) : 0;
-    return `<article class="skill-card"><div class="skill-meta"><span class="skill-tag">${esc(skill.topic)}</span><span class="skill-count">${stats.answered ? `${accuracy}% accuracy` : 'Ready to try'}</span></div><h3>${esc(skill.title)}</h3><p>${esc(skill.description)}</p><button class="skill-start" data-start-skill="${skill.id}">Start practising&nbsp; →</button></article>`;
+    return `<article class="skill-card"><div class="skill-meta"><span class="skill-tag">${esc(skill.topic)}</span><span class="skill-count">${stats.answered ? `${accuracy}% accuracy` : 'Ready to try'}</span></div><h3>${esc(skill.title)}</h3><p>${esc(skillDescription(selectedGrade, selectedSubject, skill))}</p><button class="skill-start" data-start-skill="${skill.id}">Start practising&nbsp; →</button></article>`;
   }).join('');
 }
 function renderHeader() {
@@ -183,8 +164,8 @@ function renderHeader() {
 }
 function startPractice(skillId) {
   const skill = getSkill(selectedSubject, skillId);
-  const bank = BANK[selectedSubject] && BANK[selectedSubject][skillId];
-  if (!skill || !bank || bank.length === 0) { showToast('This skill is being prepared. Try another one!'); return; }
+  const bank = getQuestions(selectedGrade, selectedSubject, skillId);
+  if (!skill || bank.length === 0) { showToast('This skill is being prepared. Try another one!'); return; }
   activeSkill = { grade: selectedGrade, subject: selectedSubject, skillId, skill, key: skillKey(selectedGrade, selectedSubject, skillId) };
   const questions = [...bank].sort(() => Math.random() - 0.5).slice(0, Math.min(5, bank.length));
   session = { questions, index: 0, correct: 0, answered: false, earned: 0, hintShown: false };
